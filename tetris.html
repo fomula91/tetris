@@ -31,30 +31,87 @@
 
         <!-- Start overlay -->
         <div class="overlay" id="start-overlay">
-          <div class="overlay-title">TETRIS</div>
-          <div class="controls-grid">
-            <div class="ctrl-key">← →</div><div class="ctrl-label">이동</div>
-            <div class="ctrl-key">↑</div><div class="ctrl-label">회전</div>
-            <div class="ctrl-key">↓</div><div class="ctrl-label">소프트 드롭</div>
-            <div class="ctrl-key">SPACE</div><div class="ctrl-label">하드 드롭</div>
-            <div class="ctrl-key">P</div><div class="ctrl-label">일시정지</div>
-            <div class="ctrl-key">M</div><div class="ctrl-label">음소거</div>
+          <div class="overlay-deco-lines"></div>
+          <div class="overlay-content start-content">
+            <div class="start-logo">
+              <div class="start-logo-text">TETRIS</div>
+              <div class="start-logo-sub">PREMIUM ARCADE</div>
+            </div>
+            <div class="start-divider"></div>
+            <div class="start-section">
+              <div class="section-label">CONTROLS</div>
+              <div class="controls-grid">
+                <div class="ctrl-key">← →</div><div class="ctrl-label">이동</div>
+                <div class="ctrl-key">↑</div><div class="ctrl-label">회전</div>
+                <div class="ctrl-key">↓</div><div class="ctrl-label">소프트 드롭</div>
+                <div class="ctrl-key">SPACE</div><div class="ctrl-label">하드 드롭</div>
+                <div class="ctrl-key">P</div><div class="ctrl-label">일시정지</div>
+                <div class="ctrl-key">M</div><div class="ctrl-label">음소거</div>
+              </div>
+            </div>
+            <div class="start-divider"></div>
+            <div class="start-best">
+              BEST SCORE <span id="start-best-score">000000</span>
+            </div>
+            <div class="blink">PRESS SPACE TO START</div>
           </div>
-          <div class="blink">PRESS SPACE TO START</div>
         </div>
 
         <!-- Game over overlay -->
         <div class="overlay hidden" id="gameover-overlay">
-          <div class="overlay-title">GAME OVER</div>
-          <div class="overlay-score">SCORE: <span id="final-score">0</span></div>
-          <div class="overlay-sub">BEST: <span id="best-score">0</span></div>
-          <div class="blink">PRESS SPACE TO RETRY</div>
+          <div class="overlay-deco-lines"></div>
+          <div class="overlay-content gameover-content">
+            <div class="gameover-icon">
+              <div class="gameover-x">X</div>
+            </div>
+            <div class="overlay-title gameover-title">GAME OVER</div>
+            <div class="gameover-stats">
+              <div class="gameover-stat-row">
+                <span class="gameover-stat-label">SCORE</span>
+                <span class="gameover-stat-value highlight" id="final-score">000000</span>
+              </div>
+              <div class="gameover-stat-row">
+                <span class="gameover-stat-label">BEST</span>
+                <span class="gameover-stat-value" id="best-score">000000</span>
+              </div>
+              <div class="gameover-stat-row">
+                <span class="gameover-stat-label">LEVEL</span>
+                <span class="gameover-stat-value" id="final-level">1</span>
+              </div>
+              <div class="gameover-stat-row">
+                <span class="gameover-stat-label">LINES</span>
+                <span class="gameover-stat-value" id="final-lines">0</span>
+              </div>
+              <div class="gameover-stat-row">
+                <span class="gameover-stat-label">TIME</span>
+                <span class="gameover-stat-value" id="final-time">00:00</span>
+              </div>
+            </div>
+            <div class="gameover-new-best hidden" id="new-best-badge">NEW BEST!</div>
+            <div class="blink">PRESS SPACE TO RETRY</div>
+          </div>
         </div>
 
         <!-- Pause overlay -->
         <div class="overlay hidden" id="pause-overlay">
-          <div class="overlay-title">PAUSED</div>
-          <div class="blink">PRESS P TO CONTINUE</div>
+          <div class="overlay-deco-lines"></div>
+          <div class="overlay-content pause-content">
+            <div class="pause-icon">
+              <div class="pause-bar"></div>
+              <div class="pause-bar"></div>
+            </div>
+            <div class="overlay-title">PAUSED</div>
+            <div class="pause-stats">
+              <div class="pause-stat">SCORE <span id="pause-score">000000</span></div>
+              <div class="pause-stat">LEVEL <span id="pause-level">1</span></div>
+              <div class="pause-stat">LINES <span id="pause-lines">0</span></div>
+            </div>
+            <div class="pause-controls">
+              <div class="pause-action"><span class="ctrl-key">P</span> 계속하기</div>
+              <div class="pause-action"><span class="ctrl-key">M</span> 음소거</div>
+            </div>
+            <div class="blink">PRESS P TO CONTINUE</div>
+          </div>
         </div>
       </div>
     </div>

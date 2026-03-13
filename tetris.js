@@ -531,16 +531,7 @@ function draw() {
     const ghost = getGhost();
     ghost.matrix.forEach((row, r) => {
       row.forEach((val, c) => {
-        if (val) {
-          const px = (ghost.x + c) * CELL, py = (ghost.y + r) * CELL;
-          ctx.globalAlpha = 0.12;
-          ctx.strokeStyle = COLORS[val];
-          ctx.lineWidth = 1;
-          ctx.setLineDash([3, 3]);
-          ctx.strokeRect(px + 2, py + 2, CELL - 4, CELL - 4);
-          ctx.setLineDash([]);
-          ctx.globalAlpha = 1;
-        }
+        if (val) drawCell(ctx, ghost.x + c, ghost.y + r, val, 0.25);
       });
     });
 
@@ -611,6 +602,13 @@ function loop(timestamp) {
   animFrame = requestAnimationFrame(loop);
 }
 
+function getElapsedTime() {
+  const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+  const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+  const s = (elapsed % 60).toString().padStart(2, '0');
+  return m + ':' + s;
+}
+
 function startGame() {
   if (AC.state === 'suspended') AC.resume();
   stopBGM();
@@ -632,10 +630,30 @@ function endGame() {
   cancelAnimationFrame(animFrame);
   stopBGM();
   SFX.gameOver();
+
+  const isNewBest = score > parseInt(localStorage.getItem('tetrisBest') || '0') && score > 0;
+
   document.getElementById('final-score').textContent = score.toString().padStart(6, '0');
   document.getElementById('best-score').textContent = bestScore.toString().padStart(6, '0');
+  document.getElementById('final-level').textContent = level;
+  document.getElementById('final-lines').textContent = lines;
+  document.getElementById('final-time').textContent = getElapsedTime();
+
+  const badge = document.getElementById('new-best-badge');
+  if (isNewBest) {
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+
   document.getElementById('gameover-overlay').classList.remove('hidden');
   draw();
+}
+
+function showPauseStats() {
+  document.getElementById('pause-score').textContent = score.toString().padStart(6, '0');
+  document.getElementById('pause-level').textContent = level;
+  document.getElementById('pause-lines').textContent = lines;
 }
 
 // ── Input ──
@@ -661,6 +679,7 @@ document.addEventListener('keydown', e => {
   if (e.code === 'KeyP') {
     if (!running || gameOver) return;
     paused = !paused;
+    if (paused) showPauseStats();
     document.getElementById('pause-overlay').classList.toggle('hidden', !paused);
     if (!paused) {
       lastTime = performance.now();
@@ -700,6 +719,10 @@ document.addEventListener('keydown', e => {
   }
   draw();
 });
+
+// Show best score on start screen
+const savedBest = localStorage.getItem('tetrisBest') || '0';
+document.getElementById('start-best-score').textContent = savedBest.padStart(6, '0');
 
 // Initial draw
 draw();
