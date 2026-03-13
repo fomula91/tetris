@@ -232,10 +232,98 @@ function updateBGMSpeed() {
 }
 
 let muteState = false;
+let showGhost = true;
+let optionsOpen = false;
+
 function toggleMute() {
+  if (!masterGain) initAudio();
   muteState = !muteState;
-  masterGain.gain.setTargetAtTime(muteState ? 0 : 0.7, AC.currentTime, 0.05);
-  document.getElementById('mute-btn').querySelector('.icon').textContent = muteState ? '🔇' : '🔊';
+  const vol = muteState ? 0 : parseInt(document.getElementById('master-vol').value) / 100;
+  masterGain.gain.setTargetAtTime(vol, AC.currentTime, 0.05);
+}
+
+// ── Options panel ──
+function toggleOptions() {
+  if (optionsOpen) {
+    closeOptions();
+  } else {
+    openOptions();
+  }
+}
+
+function openOptions() {
+  if (!masterGain) initAudio();
+  optionsOpen = true;
+  document.getElementById('options-backdrop').classList.remove('hidden');
+  document.getElementById('options-panel').classList.remove('hidden');
+  // Pause game if running
+  if (running && !paused && !gameOver) {
+    paused = true;
+    showPauseStats();
+    document.getElementById('pause-overlay').classList.remove('hidden');
+    stopBGM();
+  }
+}
+
+function closeOptions() {
+  optionsOpen = false;
+  document.getElementById('options-backdrop').classList.add('hidden');
+  document.getElementById('options-panel').classList.add('hidden');
+}
+
+function onMasterVolChange(val) {
+  if (!masterGain) initAudio();
+  const v = val / 100;
+  masterGain.gain.setTargetAtTime(v, AC.currentTime, 0.02);
+  document.getElementById('master-vol-value').textContent = val + '%';
+  document.getElementById('master-vol-fill').style.width = val + '%';
+  muteState = val === '0';
+}
+
+function onBgmVolChange(val) {
+  if (!bgmGain) initAudio();
+  const v = val / 100;
+  bgmGain.gain.setTargetAtTime(v * 0.7, AC.currentTime, 0.02);
+  document.getElementById('bgm-vol-value').textContent = val + '%';
+  document.getElementById('bgm-vol-fill').style.width = val + '%';
+}
+
+function onSfxVolChange(val) {
+  if (!sfxGain) initAudio();
+  const v = val / 100;
+  sfxGain.gain.setTargetAtTime(v, AC.currentTime, 0.02);
+  document.getElementById('sfx-vol-value').textContent = val + '%';
+  document.getElementById('sfx-vol-fill').style.width = val + '%';
+}
+
+function toggleFullscreen() {
+  const toggle = document.getElementById('fullscreen-toggle');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().then(() => {
+      toggle.classList.add('active');
+    }).catch(() => {});
+  } else {
+    document.exitFullscreen().then(() => {
+      toggle.classList.remove('active');
+    }).catch(() => {});
+  }
+}
+
+// Sync fullscreen toggle if user exits fullscreen via Escape/F11
+document.addEventListener('fullscreenchange', () => {
+  const toggle = document.getElementById('fullscreen-toggle');
+  if (document.fullscreenElement) {
+    toggle.classList.add('active');
+  } else {
+    toggle.classList.remove('active');
+  }
+});
+
+function toggleGhostPiece() {
+  showGhost = !showGhost;
+  const toggle = document.getElementById('ghost-toggle');
+  toggle.classList.toggle('active', showGhost);
+  draw();
 }
 
 // ═══════════════════════════════════════════
@@ -528,12 +616,14 @@ function draw() {
 
   if (piece && !gameOver) {
     // Ghost piece
-    const ghost = getGhost();
-    ghost.matrix.forEach((row, r) => {
-      row.forEach((val, c) => {
-        if (val) drawCell(ctx, ghost.x + c, ghost.y + r, val, 0.25);
+    if (showGhost) {
+      const ghost = getGhost();
+      ghost.matrix.forEach((row, r) => {
+        row.forEach((val, c) => {
+          if (val) drawCell(ctx, ghost.x + c, ghost.y + r, val, 0.25);
+        });
       });
-    });
+    }
 
     // Active piece
     piece.matrix.forEach((row, r) => {
@@ -661,8 +751,17 @@ document.addEventListener('keydown', e => {
   if (!masterGain) initAudio();
   if (AC.state === 'suspended') AC.resume();
 
+  if (e.code === 'Escape') {
+    e.preventDefault();
+    if (optionsOpen) {
+      closeOptions();
+    }
+    return;
+  }
+
   if (e.code === 'Space') {
     e.preventDefault();
+    if (optionsOpen) return;
     if (!running || gameOver) {
       startGame();
       return;

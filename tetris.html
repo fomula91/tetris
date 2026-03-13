@@ -146,11 +146,88 @@
       <canvas id="next-canvas" width="120" height="80"></canvas>
     </div>
     <div class="panel-box">
-      <button class="sound-btn" id="mute-btn" onclick="toggleMute()">
-        <span class="icon">🔊</span>
-        <span class="key-hint">M</span>
+      <button class="sound-btn" id="options-btn" onclick="toggleOptions()">
+        <span class="icon">⚙</span>
+        <span style="font-size:9px;">OPTIONS</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- Options overlay (full screen, above everything) -->
+<div class="options-backdrop hidden" id="options-backdrop" onclick="closeOptions()"></div>
+<div class="options-panel hidden" id="options-panel">
+  <div class="options-header">
+    <div class="options-title">OPTIONS</div>
+    <button class="options-close" onclick="closeOptions()">✕</button>
+  </div>
+
+  <div class="options-body">
+    <!-- Master Volume -->
+    <div class="option-group">
+      <div class="option-row">
+        <div class="option-label">MASTER</div>
+        <div class="option-value" id="master-vol-value">70%</div>
+      </div>
+      <div class="slider-track">
+        <input type="range" class="option-slider" id="master-vol" min="0" max="100" value="70" oninput="onMasterVolChange(this.value)">
+        <div class="slider-fill" id="master-vol-fill" style="width:70%"></div>
+      </div>
+    </div>
+
+    <!-- BGM Volume -->
+    <div class="option-group">
+      <div class="option-row">
+        <div class="option-label">BGM</div>
+        <div class="option-value" id="bgm-vol-value">40%</div>
+      </div>
+      <div class="slider-track">
+        <input type="range" class="option-slider" id="bgm-vol" min="0" max="100" value="40" oninput="onBgmVolChange(this.value)">
+        <div class="slider-fill" id="bgm-vol-fill" style="width:40%"></div>
+      </div>
+    </div>
+
+    <!-- SFX Volume -->
+    <div class="option-group">
+      <div class="option-row">
+        <div class="option-label">SFX</div>
+        <div class="option-value" id="sfx-vol-value">100%</div>
+      </div>
+      <div class="slider-track">
+        <input type="range" class="option-slider" id="sfx-vol" min="0" max="100" value="100" oninput="onSfxVolChange(this.value)">
+        <div class="slider-fill" id="sfx-vol-fill" style="width:100%"></div>
+      </div>
+    </div>
+
+    <div class="options-divider"></div>
+
+    <!-- Fullscreen -->
+    <div class="option-group">
+      <div class="option-row clickable" onclick="toggleFullscreen()">
+        <div class="option-label">FULLSCREEN</div>
+        <div class="option-toggle" id="fullscreen-toggle">
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ghost Piece -->
+    <div class="option-group">
+      <div class="option-row clickable" onclick="toggleGhostPiece()">
+        <div class="option-label">GHOST PIECE</div>
+        <div class="option-toggle active" id="ghost-toggle">
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="options-footer">
+    <div class="options-hint"><span class="ctrl-key">ESC</span> 닫기</div>
   </div>
 </div>
 
