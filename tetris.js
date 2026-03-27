@@ -699,12 +699,36 @@ function getElapsedTime() {
   return m + ':' + s;
 }
 
+let onMainScreen = true;
+
+function startFromMainScreen() {
+  if (!masterGain) initAudio();
+  if (AC.state === 'suspended') AC.resume();
+  document.getElementById('main-screen').classList.add('hidden');
+  document.getElementById('wrapper').classList.remove('hidden');
+  onMainScreen = false;
+  setTimeout(() => startGame(), 500);
+}
+
+function returnToMainScreen() {
+  onMainScreen = true;
+  running = false;
+  gameOver = false;
+  cancelAnimationFrame(animFrame);
+  stopBGM();
+  document.getElementById('wrapper').classList.add('hidden');
+  document.getElementById('main-screen').classList.remove('hidden');
+  document.getElementById('gameover-overlay').classList.add('hidden');
+  // Update best score on main screen
+  const best = localStorage.getItem('tetrisBest') || '0';
+  document.getElementById('ms-best-score').textContent = parseInt(best).toLocaleString();
+}
+
 function startGame() {
   if (AC.state === 'suspended') AC.resume();
   stopBGM();
   init();
   running = true;
-  document.getElementById('start-overlay').classList.add('hidden');
   document.getElementById('gameover-overlay').classList.add('hidden');
   document.getElementById('pause-overlay').classList.add('hidden');
   lastTime = performance.now();
@@ -762,10 +786,15 @@ document.addEventListener('keydown', e => {
   if (e.code === 'Space') {
     e.preventDefault();
     if (optionsOpen) return;
-    if (!running || gameOver) {
+    if (onMainScreen) {
+      startFromMainScreen();
+      return;
+    }
+    if (gameOver) {
       startGame();
       return;
     }
+    if (!running) return;
     if (!paused) hardDrop();
     return;
   }
@@ -819,9 +848,9 @@ document.addEventListener('keydown', e => {
   draw();
 });
 
-// Show best score on start screen
+// Show best score on main screen
 const savedBest = localStorage.getItem('tetrisBest') || '0';
-document.getElementById('start-best-score').textContent = savedBest.padStart(6, '0');
+document.getElementById('ms-best-score').textContent = parseInt(savedBest).toLocaleString();
 
 // Initial draw
 draw();

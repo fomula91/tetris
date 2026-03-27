@@ -4,15 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TETRIS</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="tetris.css">
 </head>
 <body>
 
+<!-- ══ MAIN SCREEN (Stitch Design) ══ -->
+<div id="main-screen" class="main-screen">
+  <!-- Background Effects -->
+  <div class="ms-bg-grid"></div>
+  <div class="ms-light-leaks">
+    <div class="ms-light-leak ms-leak-cyan"></div>
+    <div class="ms-light-leak ms-leak-magenta"></div>
+    <div class="ms-light-leak ms-leak-yellow"></div>
+  </div>
+  <div class="ms-float-shapes">
+    <div class="ms-shape ms-shape-1"></div>
+    <div class="ms-shape ms-shape-2"></div>
+    <div class="ms-shape ms-shape-3"></div>
+  </div>
+
+  <!-- Top Bar -->
+  <header class="ms-header">
+    <span class="ms-brand">NEON TETRIS</span>
+    <div class="ms-header-actions">
+      <button class="ms-icon-btn" onclick="openOptions()">
+        <span class="material-symbols-outlined">settings</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Central Content -->
+  <main class="ms-center">
+    <div class="ms-hero">
+      <h1 class="ms-hero-title">
+        <span class="ms-hero-neon">NEON</span>
+        <span class="ms-hero-tetris">TETRIS</span>
+      </h1>
+      <div class="ms-hero-version">
+        <span class="ms-version-line"></span>
+        <span class="ms-version-text">PREMIUM ARCADE</span>
+        <span class="ms-version-line"></span>
+      </div>
+    </div>
+
+    <!-- Play Button -->
+    <div class="ms-play-wrap">
+      <div class="ms-play-glow"></div>
+      <button class="ms-play-btn" id="main-play-btn" onclick="startFromMainScreen()">PLAY</button>
+    </div>
+
+    <!-- Controls Hint -->
+    <div class="ms-controls-hint">
+      <span class="ms-hint-key">SPACE</span>
+      <span class="ms-hint-text">또는 버튼을 눌러 시작</span>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="ms-stats-grid">
+      <div class="ms-stat-card ms-stat-cyan">
+        <div class="ms-stat-header">
+          <span class="ms-stat-label">HIGH SCORE</span>
+          <span class="material-symbols-outlined ms-stat-icon-cyan">workspace_premium</span>
+        </div>
+        <div class="ms-stat-body">
+          <span class="ms-stat-value" id="ms-best-score">000000</span>
+          <span class="ms-stat-sub ms-sub-cyan">Personal Best</span>
+        </div>
+      </div>
+      <div class="ms-stat-card ms-stat-magenta">
+        <div class="ms-stat-header">
+          <span class="ms-stat-label">CONTROLS</span>
+          <span class="material-symbols-outlined ms-stat-icon-magenta">sports_esports</span>
+        </div>
+        <div class="ms-stat-controls">
+          <div class="ms-ctrl-row"><span class="ms-ctrl-key">← →</span><span class="ms-ctrl-desc">이동</span></div>
+          <div class="ms-ctrl-row"><span class="ms-ctrl-key">↑</span><span class="ms-ctrl-desc">회전</span></div>
+          <div class="ms-ctrl-row"><span class="ms-ctrl-key">SPACE</span><span class="ms-ctrl-desc">하드 드롭</span></div>
+        </div>
+      </div>
+      <div class="ms-stat-card ms-stat-yellow">
+        <div class="ms-stat-header">
+          <span class="ms-stat-label">SYSTEM STATUS</span>
+          <span class="material-symbols-outlined ms-stat-icon-yellow" style="font-variation-settings: 'FILL' 1;">bolt</span>
+        </div>
+        <div class="ms-stat-body">
+          <div class="ms-status-bars">
+            <div class="ms-bar ms-bar-active"></div>
+            <div class="ms-bar ms-bar-active"></div>
+            <div class="ms-bar ms-bar-active"></div>
+            <div class="ms-bar"></div>
+            <div class="ms-bar"></div>
+          </div>
+          <span class="ms-stat-sub ms-sub-yellow">Ready</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- HUD Corners -->
+  <div class="ms-hud-br">
+    <span class="ms-hud-text">Connection Stable</span>
+    <div class="ms-hud-bars">
+      <div class="ms-hud-bar"></div>
+      <div class="ms-hud-bar"></div>
+      <div class="ms-hud-bar"></div>
+    </div>
+  </div>
+  <div class="ms-hud-bl">
+    <span class="ms-hud-text">Secure Terminal // 0x4829FF</span>
+  </div>
+</div>
+
+<!-- ══ GAME SCREEN ══ -->
 <div class="bg-layer"></div>
 <div class="bg-grid"></div>
 
-<div class="wrapper" id="wrapper">
+<div class="wrapper hidden" id="wrapper">
   <div class="game-area">
     <div class="title-area">
       <div class="title">TETRIS</div>
@@ -28,34 +137,6 @@
 
         <!-- Line clear flash -->
         <div class="line-flash" id="line-flash"></div>
-
-        <!-- Start overlay -->
-        <div class="overlay" id="start-overlay">
-          <div class="overlay-deco-lines"></div>
-          <div class="overlay-content start-content">
-            <div class="start-logo">
-              <div class="start-logo-text">TETRIS</div>
-              <div class="start-logo-sub">PREMIUM ARCADE</div>
-            </div>
-            <div class="start-divider"></div>
-            <div class="start-section">
-              <div class="section-label">CONTROLS</div>
-              <div class="controls-grid">
-                <div class="ctrl-key">← →</div><div class="ctrl-label">이동</div>
-                <div class="ctrl-key">↑</div><div class="ctrl-label">회전</div>
-                <div class="ctrl-key">↓</div><div class="ctrl-label">소프트 드롭</div>
-                <div class="ctrl-key">SPACE</div><div class="ctrl-label">하드 드롭</div>
-                <div class="ctrl-key">P</div><div class="ctrl-label">일시정지</div>
-                <div class="ctrl-key">M</div><div class="ctrl-label">음소거</div>
-              </div>
-            </div>
-            <div class="start-divider"></div>
-            <div class="start-best">
-              BEST SCORE <span id="start-best-score">000000</span>
-            </div>
-            <div class="blink">PRESS SPACE TO START</div>
-          </div>
-        </div>
 
         <!-- Game over overlay -->
         <div class="overlay hidden" id="gameover-overlay">
