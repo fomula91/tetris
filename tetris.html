@@ -87,7 +87,7 @@
       <div class="ms-stat-card ms-stat-yellow">
         <div class="ms-stat-header">
           <span class="ms-stat-label">SYSTEM STATUS</span>
-          <span class="material-symbols-outlined ms-stat-icon-yellow" style="font-variation-settings: 'FILL' 1;">bolt</span>
+          <span class="material-symbols-outlined ms-stat-icon-yellow icon-fill">bolt</span>
         </div>
         <div class="ms-stat-body">
           <div class="ms-status-bars">
@@ -129,7 +129,7 @@
     </div>
 
     <div class="board-frame">
-      <div class="board-inner" style="position:relative;">
+      <div class="board-inner">
         <canvas id="board" width="300" height="600"></canvas>
 
         <!-- Combo popup -->
@@ -216,7 +216,7 @@
     <div class="panel-box">
       <div class="panel-label">LEVEL</div>
       <div class="panel-value" id="level-display">1</div>
-      <div class="level-bar"><div class="level-fill" id="level-fill" style="width:0%"></div></div>
+      <div class="level-bar"><div class="level-fill" id="level-fill"></div></div>
     </div>
     <div class="panel-box">
       <div class="panel-label">LINES</div>
@@ -229,7 +229,7 @@
     <div class="panel-box">
       <button class="sound-btn" id="options-btn" onclick="toggleOptions()">
         <span class="icon">⚙</span>
-        <span style="font-size:9px;">OPTIONS</span>
+        <span class="sound-btn-label">OPTIONS</span>
       </button>
     </div>
   </div>
@@ -252,7 +252,7 @@
       </div>
       <div class="slider-track">
         <input type="range" class="option-slider" id="master-vol" min="0" max="100" value="70" oninput="onMasterVolChange(this.value)">
-        <div class="slider-fill" id="master-vol-fill" style="width:70%"></div>
+        <div class="slider-fill" id="master-vol-fill"></div>
       </div>
     </div>
 
@@ -264,7 +264,7 @@
       </div>
       <div class="slider-track">
         <input type="range" class="option-slider" id="bgm-vol" min="0" max="100" value="40" oninput="onBgmVolChange(this.value)">
-        <div class="slider-fill" id="bgm-vol-fill" style="width:40%"></div>
+        <div class="slider-fill" id="bgm-vol-fill"></div>
       </div>
     </div>
 
@@ -276,7 +276,7 @@
       </div>
       <div class="slider-track">
         <input type="range" class="option-slider" id="sfx-vol" min="0" max="100" value="100" oninput="onSfxVolChange(this.value)">
-        <div class="slider-fill" id="sfx-vol-fill" style="width:100%"></div>
+        <div class="slider-fill" id="sfx-vol-fill"></div>
       </div>
     </div>
 
@@ -312,6 +312,6 @@
   </div>
 </div>
 
-<script src="tetris.js"></script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
